@@ -25,22 +25,26 @@ public class Main {
 
         // 2. Query product ID + product name
         String query = """
-                SELECT ProductID, ProductName
-                FROM products;
+                SELECT ProductID, ProductName, UnitPrice, UnitsInStock
+                  FROM products
                 """;
 
         ResultSet results = statement.executeQuery(query);
 
         // 3. Display table header
         System.out.println("--------------------------------------------------------------");
-        System.out.printf("| %-6s | %-45s |%n", "ID", "PRODUCT NAME");
+        System.out.printf("| %-6s | %-25s | %-10s | %-10s |%n",
+                "ID", "PRODUCT NAME", "UnitPrice", "UnitsInStock");
         System.out.println("--------------------------------------------------------------");
 
         // 4. Display table rows
         while (results.next()) {
             int id = results.getInt("ProductID");
             String name = results.getString("ProductName");
-            System.out.printf("| %-6d | %-45s |%n", id, name);
+            if(name.length() > 25) name = name.substring(0,25);
+            double unitPrice = results.getDouble("UnitPrice");
+            int stock = results.getInt("UnitsInStock");
+            System.out.printf("| %-6d | %-25s | %-10.2f | %-10d |%n",id, name, unitPrice, stock);
         }
 
         System.out.println("--------------------------------------------------------------");
